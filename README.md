@@ -12,5 +12,5 @@ Next, start the virtual environment with `source env/bin/activate`.
 
 Then, install the required packages with `pip install -r requirements.txt`.
 
-Finally, start the Flask server with `flask --app roadtrip --debug run`. Navigate to http://127.0.0.1:5000 to see the app in action!
+Finally, start the Flask server with `flask --app server --debug run`. Navigate to http://127.0.0.1:5000 to see the app in action!
 
