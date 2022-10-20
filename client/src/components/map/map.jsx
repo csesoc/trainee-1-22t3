@@ -8,7 +8,7 @@ import '../../index.css'
 import './map.css'
 
 function Map() {
-	const center = useMemo(() => ({ lat: -33.85, lng: 151.21 }), []);
+	const center = useMemo(() => ({ lat: -33.85, lng: 151 }), []);
 	const [address, setAddress] = useState();
 	const mapRef = useRef();
 	const onLoad = useCallback((map) => (mapRef.current = map), []);
@@ -28,7 +28,6 @@ function Map() {
 				>
 				</GoogleMap>
 			</div>
-
 		</div>
 	)
 }
