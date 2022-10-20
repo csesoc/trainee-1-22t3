@@ -1,4 +1,3 @@
-import React from 'react';
 import usePlacesAutocomplete, {
 	getGeocode,
 	getLatLng,
@@ -12,7 +11,7 @@ import {
 } from "@reach/combobox";
 import "@reach/combobox/styles.css";
 
-function SearchAddress({ setAddress }) {
+function Search({ setAddress }) {
 	const {
 		ready,
 		value,
@@ -33,7 +32,6 @@ function SearchAddress({ setAddress }) {
 	return (
 		<Combobox onSelect={handleSelect}>
 		<ComboboxInput
-			styles={{borderColor: "grey"}}
 			value={value}
 			onChange={(e) => setValue(e.target.value)}
 			disabled={!ready}
@@ -52,4 +50,4 @@ function SearchAddress({ setAddress }) {
 	)
 }
 
-export default SearchAddress
+export default Search
