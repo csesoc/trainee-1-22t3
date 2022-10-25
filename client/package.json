@@ -4,6 +4,10 @@
   "private": true,
   "dependencies": {
     "@ant-design/colors": "^6.0.0",
+    "@emotion/react": "^11.10.4",
+    "@emotion/styled": "^11.10.4",
+    "@mui/icons-material": "^5.10.9",
+    "@mui/material": "^5.10.11",
     "@reach/combobox": "^0.18.0",
     "@react-google-maps/api": "^2.13.1",
     "@testing-library/jest-dom": "^5.16.5",
