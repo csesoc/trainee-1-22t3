@@ -3,8 +3,8 @@ import {
   GoogleMap
 } from "@react-google-maps/api"
 
-import Search from "../header/search";
-import '../../index.css'
+import Search from "./search";
+import UploadCSV from "./uploadCSV";
 import './map.css'
 
 function Map() {
@@ -16,14 +16,17 @@ function Map() {
 	return (
 		<div className="container">
 			<div className="map">
-				<Search setAddress={(position) => {
-					setAddress(position);
-					mapRef.current?.panTo(position);
-				}} />
+                <div className="map__info">
+                    <Search setAddress={(position) => {
+                        setAddress(position);
+                        mapRef.current?.panTo(position);
+                    }} />
+                    <UploadCSV />
+                </div>
 				<GoogleMap 
 					zoom={11}
 					center={center}
-					mapContainerClassName='map-container'
+					mapContainerClassName='map__container'
 					onLoad={onLoad}
 				>
 				</GoogleMap>
