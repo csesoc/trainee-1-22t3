@@ -11,11 +11,13 @@
 }
 
 :root {
-	--color-bg: rgb(244, 250, 255);
-	--color-black: rgb(118, 118, 118);
-	--color-grey: #595959;
+	--color-bg: rgb(246, 250, 253);
+	--color-black: rgb(0, 0, 0);
 	--color-white: #fff;
 	--color-light: rgba(154, 154, 154, 0.798);
+
+    --color-grey: #d9d9d9;
+    --color-blue: #40a9ff;
 
 	--transition: all 400ms ease;
 	--container-width: 86%;
@@ -34,7 +36,7 @@ body {
 	width: var(--container-width-lg);
 	margin: 0 auto;
 	display: flex;
-	width: 90%;
+    max-width: 90%;
 }
 
 /* ====================== TEXT ========================= */
@@ -50,9 +52,9 @@ h5 {
 
 h1 {
 	font-size: 2.5rem;
-	text-align: center;
 }
 
 .text-light {
 	color: var(--color-light);
 }
+
