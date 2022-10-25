@@ -1,7 +1,7 @@
 import { useState, useMemo, useRef, useCallback } from "react";
 import { GoogleMap, Marker, Circle } from "@react-google-maps/api";
 
-import Search from "./search";
+// import Search from "./search";
 import UploadCSV from "./uploadCSV";
 import "./map.css";
 
@@ -24,12 +24,12 @@ export default function Map() {
     <div className="container">
       <div className="map">
         <div className="map__info">
-          <Search
+          {/* <Search
             setAddress={(position) => {
               setAddress(position);
               mapRef.current?.panTo(position);
             }}
-          />
+          /> */}
           <UploadCSV />
         </div>
         <GoogleMap
