@@ -1,0 +1,15 @@
+.header {
+	padding-top: 3rem;
+	padding-bottom: 3rem;
+	width: 100%;
+	/* display: flex; */
+	/* justify-content: center; */
+}
+
+.header__space {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 12rem;
+	max-width: 60%;
+	padding-top: 2rem;
+}

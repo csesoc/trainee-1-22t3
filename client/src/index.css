@@ -1,13 +1,58 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+* {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	box-sizing: border-box;
+	list-style: none;
+	text-decoration: none;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+:root {
+	--color-bg: rgb(244, 250, 255);
+	--color-black: rgb(118, 118, 118);
+	--color-grey: #595959;
+	--color-white: #fff;
+	--color-light: rgba(154, 154, 154, 0.798);
+
+	--transition: all 400ms ease;
+	--container-width: 86%;
+}
+
+body {
+	font-family: 'Poppins', sans-serif;
+	background: var(--color-bg);
+	color: var(--color-black);
+	line-height: 1.7;
+}
+
+/* ================= GENERAL STYLES ==================== */
+
+.container {
+	width: var(--container-width-lg);
+	margin: 0 auto;
+	display: flex;
+	width: 90%;
+}
+
+/* ====================== TEXT ========================= */
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+	font-weight: 500;
+	
+}
+
+h1 {
+	font-size: 2.5rem;
+	text-align: center;
+}
+
+.text-light {
+	color: var(--color-light);
 }
