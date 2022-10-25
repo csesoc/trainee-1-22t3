@@ -17,3 +17,15 @@
     margin-left: auto;
     margin-right: auto;
 }
+
+.map__combobox {
+    width: 250px;
+    height: 30px;
+    border: 1px solid var(--color-grey);
+    border-radius: 2px;
+    text-align: center;
+}
+
+.map__combobox:hover {
+    border-color: var(--color-blue);
+}

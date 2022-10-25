@@ -11,11 +11,13 @@
 }
 
 :root {
-	--color-bg: rgb(244, 250, 255);
-	--color-black: rgb(118, 118, 118);
-	--color-grey: #595959;
+	--color-bg: rgb(246, 250, 253);
+	--color-black: rgb(0, 0, 0);
 	--color-white: #fff;
 	--color-light: rgba(154, 154, 154, 0.798);
+
+    --color-grey: #d9d9d9;
+    --color-blue: #40a9ff;
 
 	--transition: all 400ms ease;
 	--container-width: 86%;
