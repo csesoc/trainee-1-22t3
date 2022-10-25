@@ -26,7 +26,6 @@ body {
 	background: var(--color-bg);
 	color: var(--color-black);
 	line-height: 1.7;
-<<<<<<< HEAD
 }
 
 /* ================= GENERAL STYLES ==================== */
@@ -36,37 +35,6 @@ body {
 	margin: 0 auto;
 	display: flex;
     max-width: 90%;
-=======
-}
-
-/* ================= GENERAL STYLES ==================== */
-
-.container {
-	width: var(--container-width-lg);
-	margin: 0 auto;
-	display: flex;
-	width: 90%;
-}
-
-/* ====================== TEXT ========================= */
-
-h1,
-h2,
-h3,
-h4,
-h5 {
-	font-weight: 500;
-	
-}
-
-h1 {
-	font-size: 2.5rem;
-	text-align: center;
-}
-
-.text-light {
-	color: var(--color-light);
->>>>>>> 8cf0795100f6c59246c565d8eacdfe1f26011597
 }
 
 /* ====================== TEXT ========================= */

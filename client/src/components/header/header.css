@@ -2,20 +2,6 @@
 	padding-top: 3rem;
 	padding-bottom: 3rem;
 	width: 100%;
-<<<<<<< HEAD
     text-align: center;
 }
 
-=======
-	/* display: flex; */
-	/* justify-content: center; */
-}
-
-.header__space {
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	gap: 12rem;
-	max-width: 60%;
-	padding-top: 2rem;
-}
->>>>>>> 8cf0795100f6c59246c565d8eacdfe1f26011597
