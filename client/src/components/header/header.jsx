@@ -4,7 +4,7 @@ import Title from './title'
 import 'antd/dist/antd.css';
 import './header.css'
 
-function Header() {
+export default function Header() {
   	return (
 		<div className='container'>
 			<div className="header">
@@ -13,5 +13,3 @@ function Header() {
 		</div>
   	)
 }
-
-export default Header

@@ -1,6 +1,6 @@
 import React from 'react'
 
-function Title() {
+export default function Title() {
   return (
 	<div>
 		<h1>RoadTrip Planner</h1>
@@ -9,5 +9,3 @@ function Title() {
 
   )
 }
-
-export default Title

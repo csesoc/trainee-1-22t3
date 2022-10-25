@@ -11,7 +11,7 @@ import {
 } from "@reach/combobox";
 import "@reach/combobox/styles.css";
 
-function Search({ setAddress }) {
+export default function Search({ setAddress }) {
 	const {
 		ready,
 		value,
@@ -23,7 +23,6 @@ function Search({ setAddress }) {
 	const handleSelect = async (val) => {
 		setValue(val, false);
 		clearSuggestions();
-	
 		const results = await getGeocode({ address: val });
 		const { lat, lng } = await getLatLng(results[0]);
 		setAddress({ lat, lng });
@@ -33,7 +32,7 @@ function Search({ setAddress }) {
 		<Combobox onSelect={handleSelect}>
 		<ComboboxInput
 			value={value}
-			onChange={(e) => setValue(e.target.value)}
+			onChange={e => setValue(e.target.value)}
 			disabled={!ready}
 			className="map__combobox"
 			placeholder="Search Address"
@@ -49,5 +48,3 @@ function Search({ setAddress }) {
 	  </Combobox>
 	)
 }
-
-export default Search
