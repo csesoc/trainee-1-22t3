@@ -3,6 +3,7 @@
 	height: 100vh;
   }
 
+<<<<<<< HEAD
 .map__container {
 	width: 100%;
 	height: 70vh;
@@ -16,4 +17,9 @@
     padding-bottom: 2rem;
     margin-left: auto;
     margin-right: auto;
+=======
+.map-container {
+	width: 100%;
+	height: 70vh;
+>>>>>>> 8cf0795100f6c59246c565d8eacdfe1f26011597
 }
