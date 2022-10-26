@@ -24,12 +24,6 @@ export default function Map() {
     <div className="container">
       <div className="map">
         <div className="map__info">
-          {/* <Search
-            setAddress={(position) => {
-              setAddress(position);
-              mapRef.current?.panTo(position);
-            }}
-          /> */}
           <UploadCSV />
         </div>
         <GoogleMap

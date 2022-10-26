@@ -1,29 +1,54 @@
 import React from "react";
-import { UploadOutlined } from "@ant-design/icons";
-import { Button, message, Upload } from "antd";
+import { useCSVReader } from "react-papaparse";
 
 export default function UploadCSV() {
-  const props = {
-    name: "file",
-    action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
-    headers: {
-      authorization: "authorization-text",
-    },
-    onChange(info) {
-      if (info.file.status !== "uploading") {
-        console.log(info.file, info.fileList);
-      }
-      if (info.file.status === "done") {
-        message.success(`${info.file.name} file uploaded successfully`);
-      } else if (info.file.status === "error") {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-    },
-  };
+  const { CSVReader } = useCSVReader();
 
   return (
-    <Upload {...props}>
-      <Button icon={<UploadOutlined />}>Upload CSV File</Button>
-    </Upload>
+    <CSVReader
+      onUploadAccepted={(results) => {
+        console.log("---------------------------");
+        console.log(results);
+        console.log("---------------------------");
+      }}
+    >
+      {({ getRootProps, acceptedFile, getRemoveFileProps }) => (
+        <>
+          <div style={styles.csvReader}>
+            <button type="button" {...getRootProps()} style={styles.browseFile}>
+              Browse file
+            </button>
+            <div style={styles.acceptedFile}>
+              {acceptedFile && acceptedFile.name}
+            </div>
+            <button {...getRemoveFileProps()} style={styles.remove}>
+              Remove
+            </button>
+          </div>
+        </>
+      )}
+    </CSVReader>
   );
 }
+
+const styles = {
+  csvReader: {
+    display: "flex",
+    flexDirection: "row",
+    marginBottom: 10,
+  },
+  browseFile: {
+    width: "40%",
+  },
+  acceptedFile: {
+    border: "1px solid #ccc",
+    height: 45,
+    lineHeight: 2.5,
+    paddingLeft: 10,
+    width: "80%",
+  },
+  remove: {
+    borderRadius: 0,
+    padding: "0 20px",
+  },
+};
