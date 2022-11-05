@@ -60,7 +60,7 @@ export default function Details({ body }) {
   };
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex", fontFamily:"Poppins", backgroundColor:"rgb(246, 250, 253)" }}>
       <CssBaseline />
       <div position="fixed" open={open}>
         <Toolbar>
@@ -88,7 +88,7 @@ export default function Details({ body }) {
         anchor="left"
         open={open}
       >
-        <DrawerHeader>
+        <DrawerHeader >
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === "ltr" ? (
               <ChevronLeftIcon />

@@ -1,5 +1,12 @@
 import { useState, useMemo, useRef, useCallback } from "react";
-import { GoogleMap, Marker, Circle } from "@react-google-maps/api";
+import {
+  GoogleMap,
+  Marker,
+  Circle,
+  MarkerClusterer,
+  DirectionsRenderer,
+  DirectionsService,
+} from "@react-google-maps/api";
 
 import Search from "./search";
 import UploadCSV from "./uploadCSV";
@@ -7,7 +14,8 @@ import "./map.css";
 
 export default function Map() {
   const center = useMemo(() => ({ lat: -33.85, lng: 151 }), []);
-  const [address, setAddress] = useState();
+  const [driver, setDriver] = useState();
+  const [directions, setDirections] = useState();
   const mapRef = useRef();
   const onLoad = useCallback((map) => (mapRef.current = map), []);
   const options = useMemo(
@@ -19,14 +27,38 @@ export default function Map() {
     }),
     []
   );
+  const fetchDirections = (position) => {
+    if (!driver) return;
+    const service = new DirectionsService();
+    service.route(
+      {
+        origin: driver,
+        destination: position,
+        travelMode: "DRIVING",
+      },
+      (result, status) => {
+        if (status === "OK" && result) {
+          setDirections(result);
+        }
+      }
+    );
+  };
+
+  const stops = [
+    [{ lat: -33.8234, lng: 151.1939 }, "MJ"],
+    [{ lat: -33.7961, lng: 151.178 }, "Raiyan"],
+    [{ lat: -33.8368, lng: 151.2073 }, "Rachel"],
+    [{ lat: -33.7457, lng: 151.1432 }, "Oscar"],
+    [{ lat: -33.7201, lng: 151.117 }, "James"],
+  ];
 
   return (
     <div className="container">
       <div className="map">
         <div className="map__info">
           <Search
-            setAddress={(position) => {
-              setAddress(position);
+            setDriver={(position) => {
+              setDriver(position);
               mapRef.current?.panTo(position);
             }}
           />
@@ -39,14 +71,50 @@ export default function Map() {
           onLoad={onLoad}
           options={options}
         >
-          {address && (
+          {directions && (
+            <DirectionsRenderer
+              directions={directions}
+              options={{
+                polyLineOptions: {
+                  zIndex: 50,
+                  strokeColor: "#1976d2",
+                  strokeWeight: 5,
+                },
+              }}
+            />
+          )}
+          {driver && (
             <>
-              <Marker position={address} />
-              <Circle center={address} radius={5000} options={closeOptions} />
-              <Circle center={address} radius={10000} options={middleOptions} />
-              <Circle center={address} radius={15000} options={farOptions} />
+              <Marker
+                position={driver}
+                title={"Sally"}
+                icon={"http://maps.google.com/mapfiles/ms/icons/red-dot.png"}
+              />
+              <Circle center={driver} radius={5000} options={closeOptions} />
+              <Circle center={driver} radius={10000} options={middleOptions} />
+              <Circle center={driver} radius={15000} options={farOptions} />
             </>
           )}
+          <MarkerClusterer>
+            {(clusterer) =>
+              stops.map(([position, title], i) => (
+                <>
+                  <Marker
+                    key={i}
+                    position={position}
+                    title={`${i + 1}. ${title}`}
+                    icon={
+                      "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+                    }
+                    clusterer={clusterer}
+                    onClick={() => {
+                      fetchDirections(position);
+                    }}
+                  />
+                </>
+              ))
+            }
+          </MarkerClusterer>
         </GoogleMap>
       </div>
     </div>
