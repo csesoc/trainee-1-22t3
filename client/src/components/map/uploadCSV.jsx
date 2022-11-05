@@ -13,18 +13,29 @@ export default function UploadCSV() {
   const [values, setValues] = useState([]);
 
   const changeHandler = (event) => {
-    // Passing file data (event.target.files[0]) to parse using Papa.parse
     Papa.parse(event.target.files[0], {
       header: true,
-      skipEmptyLines: true,
       complete: function (results) {
-        const rowsArray = [];
-        // const rowsArray = ["Name", "Address", "Role"];
+        console.log(results);
+        const rowsArray = ["Name", "Suburb", "Role"];
         const valuesArray = [];
 
-        // Iterating data to get column name and their values
-        results.data.map((d) => {
-          rowsArray.push(Object.keys(d));
+        const data = [];
+
+        for (let i = 0; i < results.data.length; i++) {
+          data.push(results.data[i]);
+        }
+
+        for (let i = 0; i < data.length; i++) {
+          data[i] = Object.fromEntries(
+            Object.entries(data[i]).filter(
+              ([key]) => !key.includes("Timestamp")
+            )
+          );
+        }
+        console.log(data);
+
+        data.map((d) => {
           valuesArray.push(Object.values(d));
         });
 
@@ -32,7 +43,7 @@ export default function UploadCSV() {
         setParsedData(results.data);
 
         // Filtered Column Names
-        setTableRows(rowsArray[0]);
+        setTableRows(rowsArray);
 
         // Filtered Values
         setValues(valuesArray);
@@ -40,9 +51,11 @@ export default function UploadCSV() {
     });
   };
 
+  // return parsed csv stuff as data
+  // data = array of objects with key-value pairs
+
   return (
-    <div>
-      {/* File Uploader */}
+    <div className="returnedTable">
       <input
         type="file"
         name="file"
@@ -51,8 +64,6 @@ export default function UploadCSV() {
         style={{ display: "block", margin: "10px auto" }}
       />
       <br />
-      <br />
-      {/* Table */}
       <table>
         <thead>
           <tr>
@@ -76,60 +87,3 @@ export default function UploadCSV() {
     </div>
   );
 }
-
-// export default function UploadCSV() {
-//   const { CSVReader } = useCSVReader();
-
-//   const changeHandler = (event) => {
-//     console.log("CHANGE HANDLER");
-//     console.log(event.target.files[0]);
-//   };
-
-//   return (
-//     <CSVReader
-//       onUploadAccepted={(results) => {
-//         console.log("---------------------------");
-//         console.log(results);
-//         console.log("---------------------------");
-//       }}
-//     >
-//       {({ getRootProps, acceptedFile, getRemoveFileProps }) => (
-//         <>
-//           <div style={styles.csvReader}>
-//             <button type="button" {...getRootProps()} style={styles.browseFile}>
-//               Browse file
-//             </button>
-//             <div style={styles.acceptedFile}>
-//               {acceptedFile && acceptedFile.name}
-//             </div>
-//             <button {...getRemoveFileProps()} style={styles.remove}>
-//               Remove
-//             </button>
-//           </div>
-//         </>
-//       )}
-//     </CSVReader>
-//   );
-// }
-
-// const styles = {
-//   csvReader: {
-//     display: "flex",
-//     flexDirection: "row",
-//     marginBottom: 10,
-//   },
-//   browseFile: {
-//     width: "40%",
-//   },
-//   acceptedFile: {
-//     border: "1px solid #ccc",
-//     height: 45,
-//     lineHeight: 2.5,
-//     paddingLeft: 10,
-//     width: "80%",
-//   },
-//   remove: {
-//     borderRadius: 0,
-//     padding: "0 20px",
-//   },
-// };
