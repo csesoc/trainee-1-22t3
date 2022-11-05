@@ -51,9 +51,6 @@ export default function UploadCSV() {
     });
   };
 
-  // return parsed csv stuff as data
-  // data = array of objects with key-value pairs
-
   return (
     <div className="returnedTable">
       <input
@@ -66,13 +63,13 @@ export default function UploadCSV() {
       <br />
       <table>
         <thead>
-          <tr>
+          <tr id="tableHead">
             {tableRows.map((rows, index) => {
               return <th key={index}>{rows}</th>;
             })}
           </tr>
         </thead>
-        <tbody>
+        <tbody id="tableRow">
           {values.map((value, index) => {
             return (
               <tr key={index}>

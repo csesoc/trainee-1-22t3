@@ -37,3 +37,27 @@
 .map__combobox:hover::placeholder {
   color: var(--color-blue);
 }
+
+table {
+  border-collapse: collapse;
+  border-spacing: 2rem;
+  width: 100%;
+}
+
+thead {
+  border-bottom: 1px solid #999;
+}
+
+thead,
+tbody {
+  /* border: 1px solid #999; */
+  padding: 2rem;
+  text-align: left;
+}
+
+.returnedTable {
+  padding: 10px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
