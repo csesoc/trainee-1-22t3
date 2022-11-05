@@ -9,7 +9,7 @@ import Details from "./components/details/details";
 function App() {
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: "AIzaSyBvChWmi1hl5drsquInQ-ag3OLpylkQC2E",
-    libraries: ["places"],
+    libraries: ["places", "directions"],
   });
 
   if (!isLoaded) return <div>Loading...</div>;

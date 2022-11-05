@@ -38,3 +38,7 @@
 .map__combobox:hover::placeholder {
     color: var(--color-blue);
 }
+
+.passenger__marker:hover {
+    content: "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png"
+}
