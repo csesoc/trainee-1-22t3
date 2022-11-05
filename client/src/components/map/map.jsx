@@ -11,12 +11,12 @@ import {
 import Search from "./search";
 import UploadCSV from "./uploadCSV";
 import "./map.css";
+import Passengers from "./passengers";
 
 export default function Map() {
   const center = useMemo(() => ({ lat: -33.85, lng: 151 }), []);
   const [driver, setDriver] = useState();
   const [directions, setDirections] = useState();
-  const [style, setStyle] = useState(false);
   const mapRef = useRef();
   const onLoad = useCallback((map) => (mapRef.current = map), []);
   const options = useMemo(
@@ -28,31 +28,6 @@ export default function Map() {
     }),
     []
   );
-
-  // Click on icon
-  const handleClick = () => {
-    setStyle((current) => !current);
-  };
-  const iconStyle = style
-    ? "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png"
-    : "http://maps.google.com/mapfiles/ms/icons/blue-dot.png";
-
-  const fetchDirections = async (position) => {
-    if (!driver) return;
-    const service = new DirectionsService();
-    service.route(
-      {
-        origin: driver,
-        destination: position,
-        travelMode: "DRIVING",
-      },
-      (result, status) => {
-        if (status === "OK" && result) {
-          setDirections(result);
-        }
-      }
-    );
-  };
 
   const stops = [
     [{ lat: -33.8234, lng: 151.1939 }, "MJ"],
@@ -108,16 +83,14 @@ export default function Map() {
           <MarkerClusterer>
             {(clusterer) =>
               stops.map(([position, title], i) => (
-                <div className="passenger__marker">
-                  <Marker
-                    key={i}
-                    position={position}
-                    title={`${i + 1}. ${title}`}
-                    icon={iconStyle}
-                    clusterer={clusterer}
-                    onClick={handleClick && fetchDirections(position)}
-                  />
-                </div>
+                <Passengers
+                  driver={driver}
+                  position={position}
+                  title={title}
+                  i={i}
+                  clusterer={clusterer}
+                  findDirection={setDirections}
+                />
               ))
             }
           </MarkerClusterer>
