@@ -29,7 +29,7 @@ export default function Map() {
   );
   const fetchDirections = (position) => {
     if (!driver) return;
-    const service = new DirectionsService();
+    const service = new google.maps.DirectionsService();
     service.route(
       {
         origin: driver,
