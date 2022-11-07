@@ -15,25 +15,21 @@ export default function UploadCSV() {
   const changeHandler = (event) => {
     Papa.parse(event.target.files[0], {
       header: true,
-      complete: function (results) {
+      complete: (results) => {
         console.log(results);
         const rowsArray = ["Name", "Suburb", "Role"];
         const valuesArray = [];
 
-        const data = [];
+        let data = [];
 
-        for (let i = 0; i < results.data.length; i++) {
-          data.push(results.data[i]);
+        for (let obj of results.data) {
+          let asArray = Object.entries(obj);
+          asArray.shift();
+          for (let pair of asArray) {
+            pair.shift();
+          }
+          data.push(asArray);
         }
-
-        for (let i = 0; i < data.length; i++) {
-          data[i] = Object.fromEntries(
-            Object.entries(data[i]).filter(
-              ([key]) => !key.includes("Timestamp")
-            )
-          );
-        }
-        console.log(data);
 
         data.map((d) => {
           valuesArray.push(Object.values(d));
@@ -60,7 +56,6 @@ export default function UploadCSV() {
         accept=".csv"
         style={{ display: "block", margin: "10px auto" }}
       />
-      <br />
       <table>
         <thead>
           <tr id="tableHead">
