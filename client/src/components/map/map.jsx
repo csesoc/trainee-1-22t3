@@ -5,18 +5,17 @@ import {
   Circle,
   MarkerClusterer,
   DirectionsRenderer,
-  DirectionsService,
 } from "@react-google-maps/api";
 
 import Search from "./search";
 import UploadCSV from "./uploadCSV";
 import "./map.css";
-import Passengers from "./passengers";
 
 export default function Map() {
   const center = useMemo(() => ({ lat: -33.85, lng: 151 }), []);
   const [driver, setDriver] = useState();
   const [directions, setDirections] = useState();
+  const [style, setStyle] = useState(false);
   const mapRef = useRef();
   const onLoad = useCallback((map) => (mapRef.current = map), []);
   const options = useMemo(
@@ -28,6 +27,27 @@ export default function Map() {
     }),
     []
   );
+
+  const fetchDirections = async (position) => {
+    if (!driver) return;
+    const service = new window.google.maps.DirectionsService();
+    service.route(
+      {
+        origin: driver,
+        destination: position,
+        travelMode: window.google.maps.TravelMode.DRIVING,
+      },
+      (result, status) => {
+        if (status === "OK" && result) {
+          setDirections(result);
+        }
+      }
+    );
+  };
+
+  const iconStyle = style
+    ? "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png"
+    : "http://maps.google.com/mapfiles/ms/icons/blue-dot.png";
 
   const stops = [
     [{ lat: -33.8234, lng: 151.1939 }, "MJ"],
@@ -73,7 +93,7 @@ export default function Map() {
               <Marker
                 position={driver}
                 title={"Sally"}
-                icon={"http://maps.google.com/mapfiles/ms/icons/red-dot.png"}
+                // icon={"http://maps.google.com/mapfiles/ms/icons/red-dot.png"}
               />
               <Circle center={driver} radius={5000} options={closeOptions} />
               <Circle center={driver} radius={10000} options={middleOptions} />
@@ -83,13 +103,16 @@ export default function Map() {
           <MarkerClusterer>
             {(clusterer) =>
               stops.map(([position, title], i) => (
-                <Passengers
-                  driver={driver}
+                <Marker
+                  key={i}
                   position={position}
-                  title={title}
-                  i={i}
+                  title={`${i + 1}. ${title}`}
+                  //   icon={iconStyle}
                   clusterer={clusterer}
-                  findDirection={setDirections}
+                  onClick={() => {
+                    setStyle((current) => !current);
+                    fetchDirections(position);
+                  }}
                 />
               ))
             }
