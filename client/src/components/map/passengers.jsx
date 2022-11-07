@@ -20,7 +20,7 @@ export default function Passengers({
 
   const fetchDirections = async (position) => {
     if (!driver) return;
-    const service = new google.maps.DirectionsService();
+    const service = new DirectionsService();
     service.route(
       {
         origin: driver,
