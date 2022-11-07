@@ -59,21 +59,19 @@ export default function UploadCSV() {
       <table>
         <thead>
           <tr id="tableHead">
-            {tableRows.map((rows, index) => {
-              return <th key={index}>{rows}</th>;
-            })}
+            {tableRows.map((rows, index) => (
+              <th key={index}>{rows}</th>
+            ))}
           </tr>
         </thead>
         <tbody id="tableRow">
-          {values.map((value, index) => {
-            return (
-              <tr key={index}>
-                {value.map((val, i) => {
-                  return <td key={i}>{val}</td>;
-                })}
-              </tr>
-            );
-          })}
+          {values.map((value, index) => (
+            <tr key={index}>
+              {value.map((val, i) => (
+                <td key={i}>{val}</td>
+              ))}
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>
