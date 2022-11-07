@@ -5,6 +5,7 @@ import {
   Circle,
   MarkerClusterer,
   DirectionsRenderer,
+  DirectionsService,
 } from "@react-google-maps/api";
 
 import Search from "./search";
