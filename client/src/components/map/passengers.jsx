@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Marker, DirectionsService, InfoWindow } from "@react-google-maps/api";
+import { Marker, DirectionsService } from "@react-google-maps/api";
 
 export default function Passengers({
   driver,
@@ -9,28 +9,18 @@ export default function Passengers({
   clusterer,
   findDirection,
 }) {
-  const [style, setStyle] = useState(
-    (selectedPlace = position),
-    (activeMarker = {}),
-    (showingInfoWindow = false)
-  );
-
+  const [style, setStyle] = useState(false);
   const handleClick = () => {
+    setStyle((current) => !current);
     fetchDirections(position);
-    setStyle({
-      selectedPlace: position,
-      activeMarker: marker,
-      showingInfoWindow: true,
-    });
   };
-
   const iconStyle = style
     ? "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png"
     : "http://maps.google.com/mapfiles/ms/icons/blue-dot.png";
 
   const fetchDirections = async (position) => {
     if (!driver) return;
-    const service = new DirectionsService();
+    const service = new google.maps.DirectionsService();
     service.route(
       {
         origin: driver,
@@ -45,20 +35,8 @@ export default function Passengers({
     );
   };
 
-  const onInfoWindowClose = () => {
-    setStyle({
-      activeMarker: null,
-      showingInfoWindow: false,
-    });
-  };
-
   return (
     <div>
-      {/* <InfoWindow
-        marker={activeMarker}
-        onClose={onInfoWindowClose}
-        visible={showingInfoWindow}
-      ></InfoWindow> */}
       <Marker
         key={i}
         position={position}
