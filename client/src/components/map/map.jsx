@@ -61,12 +61,12 @@ export default function Map() {
     <div className="container">
       <div className="map">
         <div className="map__info">
-          <Search
+          {/* <Search
             setDriver={(position) => {
               setDriver(position);
               mapRef.current?.panTo(position);
             }}
-          />
+          /> */}
           <UploadCSV />
         </div>
         <GoogleMap
