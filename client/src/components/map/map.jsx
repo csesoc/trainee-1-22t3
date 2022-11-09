@@ -48,12 +48,17 @@ const Map = () => {
     ? "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png"
     : "http://maps.google.com/mapfiles/ms/icons/blue-dot.png";
 
-  const stops = [
+  const passengers = [
     [{ lat: -33.8234, lng: 151.1939 }, "MJ"],
     [{ lat: -33.7961, lng: 151.178 }, "Raiyan"],
     [{ lat: -33.8368, lng: 151.2073 }, "Rachel"],
     [{ lat: -33.7457, lng: 151.1432 }, "Oscar"],
     [{ lat: -33.7201, lng: 151.117 }, "James"],
+  ];
+
+  const drivers = [
+    [{ lat: -33.82, lng: 151.19 }, "Sally"],
+    [{ lat: -33.9646, lng: 151.101 }, "Sally 2"],
   ];
 
   return (
@@ -81,21 +86,9 @@ const Map = () => {
               }}
             />
           )}
-          {driver && (
-            <>
-              <Marker
-                position={driver}
-                title={"Sally"}
-                // icon={"http://maps.google.com/mapfiles/ms/icons/red-dot.png"}
-              />
-              <Circle center={driver} radius={5000} options={closeOptions} />
-              <Circle center={driver} radius={10000} options={middleOptions} />
-              <Circle center={driver} radius={15000} options={farOptions} />
-            </>
-          )}
           <MarkerClusterer>
             {(clusterer) =>
-              stops.map(([position, title], i) => (
+              passengers.map(([position, title], i) => (
                 <Marker
                   key={i}
                   position={position}
@@ -107,6 +100,42 @@ const Map = () => {
                     fetchDirections(position);
                   }}
                 />
+              ))
+            }
+          </MarkerClusterer>
+          <MarkerClusterer>
+            {(clusterer) =>
+              drivers.map(([position, title], i) => (
+                <>
+                  <Marker
+                    key={i}
+                    position={position}
+                    title={`${i + 1}. ${title}`}
+                    icon={
+                      "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
+                    }
+                    clusterer={clusterer}
+                    onClick={() => {
+                      setStyle((current) => !current);
+                      fetchDirections(position);
+                    }}
+                  />
+                  <Circle
+                    center={position}
+                    radius={5000}
+                    options={closeOptions}
+                  />
+                  <Circle
+                    center={position}
+                    radius={10000}
+                    options={middleOptions}
+                  />
+                  <Circle
+                    center={position}
+                    radius={15000}
+                    options={farOptions}
+                  />
+                </>
               ))
             }
           </MarkerClusterer>
