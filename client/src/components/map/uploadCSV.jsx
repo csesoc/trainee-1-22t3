@@ -43,7 +43,7 @@ const UploadCSV = () => {
     console.log(address);
     geocoder.geocode({ address: address }, function (results, status) {
       if (status == "OK") {
-        console.log(results[0].geometry.location.lat);
+        console.log(results[0].geometry.location);
         return results[0].geometry.location;
       } else {
         alert("Geocode was not successful for the following reason: " + status);
