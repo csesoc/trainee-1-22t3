@@ -7,11 +7,10 @@ import {
   DirectionsRenderer,
 } from "@react-google-maps/api";
 
-// import Search from "./search";
 import UploadCSV from "./uploadCSV";
 import "./map.css";
 
-export default function Map() {
+const Map = () => {
   const center = useMemo(() => ({ lat: -33.85, lng: 151 }), []);
   const [driver, setDriver] = useState();
   const [directions, setDirections] = useState();
@@ -61,12 +60,6 @@ export default function Map() {
     <div className="container">
       <div className="map">
         <div className="map__info">
-          {/* <Search
-            setDriver={(position) => {
-              setDriver(position);
-              mapRef.current?.panTo(position);
-            }}
-          /> */}
           <UploadCSV />
         </div>
         <GoogleMap
@@ -107,7 +100,7 @@ export default function Map() {
                   key={i}
                   position={position}
                   title={`${i + 1}. ${title}`}
-                  //   icon={iconStyle}
+                  icon={iconStyle}
                   clusterer={clusterer}
                   onClick={() => {
                     setStyle((current) => !current);
@@ -121,7 +114,9 @@ export default function Map() {
       </div>
     </div>
   );
-}
+};
+
+export default Map;
 
 // Map circle options
 const defaultOptions = {

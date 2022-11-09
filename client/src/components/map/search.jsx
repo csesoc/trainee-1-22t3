@@ -11,7 +11,7 @@ import {
 } from "@reach/combobox";
 import "@reach/combobox/styles.css";
 
-export default function Search({ setDriver }) {
+const Search = ({ setDriver }) => {
   const {
     ready,
     value,
@@ -47,4 +47,6 @@ export default function Search({ setDriver }) {
       </ComboboxPopover>
     </Combobox>
   );
-}
+};
+
+export default Search;

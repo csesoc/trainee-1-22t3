@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 import Papa from "papaparse";
 
-export default function UploadCSV() {
+const UploadCSV = () => {
   // State to store parsed data
   const [parsedData, setParsedData] = useState([]);
 
@@ -76,4 +76,6 @@ export default function UploadCSV() {
       </table>
     </div>
   );
-}
+};
+
+export default UploadCSV;
