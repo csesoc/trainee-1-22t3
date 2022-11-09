@@ -2,12 +2,13 @@ import React from "react";
 import { useState } from "react";
 import Papa from "papaparse";
 
-const UploadCSV = ({ setDrivers, setPassengers }) => {
+const UploadCSV = () => {
   // State to store parsed data
   const [parsedData, setParsedData] = useState([]);
 
   //State to store table Column name
   const [tableRows, setTableRows] = useState([]);
+
   const rowsArray = ["Name", "Suburb", "Role"];
 
   const changeHandler = (event) => {
@@ -22,12 +23,31 @@ const UploadCSV = ({ setDrivers, setPassengers }) => {
         // Parsed Data Response in array format
         setParsedData(results.data);
 
-        // Get drivers and passengers
-        setDrivers(parsedData.filter((person) => person.Role == "Driver"));
-        setPassengers(
-          parsedData.filter((person) => person.Role == "Passenger")
-        );
+        // // Get drivers and passengers
+        // setDrivers(
+        //   results.data
+        //     .filter((person) => person.Role == "Driver")
+        //     .forEach(
+        //       (person) => (person.Suburb = findLatLong(`${person.Suburb} NSW`))
+        //     )
+        // );
+        // setPassengers(
+        //   results.data.filter((person) => person.Role == "Passenger")
+        // );
       },
+    });
+  };
+
+  const findLatLong = async (address) => {
+    const geocoder = new window.google.maps.Geocoder();
+    console.log(address);
+    geocoder.geocode({ address: address }, function (results, status) {
+      if (status == "OK") {
+        console.log(results[0].geometry.location.lat);
+        return results[0].geometry.location;
+      } else {
+        alert("Geocode was not successful for the following reason: " + status);
+      }
     });
   };
 
@@ -50,11 +70,11 @@ const UploadCSV = ({ setDrivers, setPassengers }) => {
         </thead>
         <tbody id="tableRow">
           {parsedData &&
-            parsedData.map((parsedData, index) => (
+            parsedData.map((person, index) => (
               <tr key={index}>
-                <td>{parsedData.Name}</td>
-                <td>{parsedData.Suburb}</td>
-                <td>{parsedData.Role}</td>
+                <td>{person.Name}</td>
+                <td>{person.Suburb}</td>
+                <td>{person.Role}</td>
               </tr>
             ))}
         </tbody>

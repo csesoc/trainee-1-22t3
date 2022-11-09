@@ -12,8 +12,8 @@ import "./map.css";
 
 const Map = () => {
   const center = useMemo(() => ({ lat: -33.85, lng: 151 }), []);
-  const [drivers, setDrivers] = useState();
-  const [passengers, setPassengers] = useState();
+  //   const [drivers, setDrivers] = useState();
+  //   const [passengers, setPassengers] = useState();
   const [directions, setDirections] = useState();
   const [style, setStyle] = useState(false);
   const mapRef = useRef();
@@ -22,51 +22,53 @@ const Map = () => {
     () => ({
       // mapId: "b181cac70f27f5e6", // dark map
       mapId: "2ca571bbe60acfd2", // light map
-      //   disableDefaultUI: true,
+      disableDefaultUI: true,
       clickableIcons: false,
     }),
     []
   );
 
-  const fetchDirections = async (position) => {
-    if (!drivers) return;
-    const service = new window.google.maps.DirectionsService();
-    service.route(
-      {
-        origin: drivers,
-        destination: position,
-        travelMode: window.google.maps.TravelMode.DRIVING,
-      },
-      (result, status) => {
-        if (status === "OK" && result) {
-          setDirections(result);
-        }
-      }
-    );
-  };
+  //   const fetchDirections = async (position) => {
+  //     if (!driver) return;
+  //     const service = new window.google.maps.DirectionsService();
+  //     service.route(
+  //       {
+  //         origin: driver,
+  //         destination: position,
+  //         travelMode: window.google.maps.TravelMode.DRIVING,
+  //       },
+  //       (result, status) => {
+  //         if (status === "OK" && result) {
+  //           setDirections(result);
+  //         }
+  //       }
+  //     );
+  //   };
 
   const iconStyle = style
     ? "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png"
     : "http://maps.google.com/mapfiles/ms/icons/blue-dot.png";
 
-  //   const passengers = [
-  //     [{ lat: -33.8234, lng: 151.1939 }, "MJ"],
-  //     [{ lat: -33.7961, lng: 151.178 }, "Raiyan"],
-  //     [{ lat: -33.8368, lng: 151.2073 }, "Rachel"],
-  //     [{ lat: -33.7457, lng: 151.1432 }, "Oscar"],
-  //     [{ lat: -33.7201, lng: 151.117 }, "James"],
-  //   ];
+  const passengers = [
+    { Name: "MJ", Suburb: { lat: -33.8234, lng: 151.1939 } },
+    { Name: "Raiyan", Suburb: { lat: -33.7961, lng: 151.178 } },
+    { Name: "Rachel", Suburb: { lat: -33.8368, lng: 151.2073 } },
+    { Name: "Oscar", Suburb: { lat: -33.7457, lng: 151.1432 } },
+    { Name: "James", Suburb: { lat: -33.7201, lng: 151.117 } },
+  ];
 
-  //   const drivers = [
-  //     [{ lat: -33.82, lng: 151.19 }, "Sally"],
-  //     [{ lat: -33.9646, lng: 151.101 }, "Hellen"],
-  //   ];
+  const drivers = [
+    { Name: "Sally", Suburb: { lat: -33.82, lng: 151.19 } },
+    { Name: "Hellen", Suburb: { lat: -33.9646, lng: 151.101 } },
+  ];
 
   return (
     <div className="container">
       <div className="map">
         <div className="map__info">
-          <UploadCSV setDrivers={setDrivers} setPassengers={setPassengers} />
+          <UploadCSV
+          //   setDrivers={setDrivers} setPassengers={setPassengers}
+          />
         </div>
         <GoogleMap
           zoom={11}
@@ -87,13 +89,13 @@ const Map = () => {
               }}
             />
           )} */}
-          {/* <MarkerClusterer>
+          <MarkerClusterer>
             {(clusterer) =>
-              passengers.map(([position, title], i) => (
+              passengers.map((person, i) => (
                 <Marker
                   key={i}
-                  position={position}
-                  title={`${i + 1}. ${title}`}
+                  position={person.Suburb}
+                  title={`${i + 1}. ${person.Name}`}
                   icon={iconStyle}
                   clusterer={clusterer}
                   onClick={() => {
@@ -106,36 +108,36 @@ const Map = () => {
           </MarkerClusterer>
           <MarkerClusterer>
             {(clusterer) =>
-              drivers.map(([position, title], i) => (
+              drivers.map((person, i) => (
                 <>
                   <Marker
                     key={i}
-                    position={position}
-                    title={`${i + 1}. ${title}`}
+                    position={person.Suburb}
+                    title={`${i + 1}. ${person.Name}`}
                     icon={
                       "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
                     }
                     clusterer={clusterer}
                   />
                   <Circle
-                    center={position}
+                    center={person.Suburb}
                     radius={5000}
                     options={closeOptions}
                   />
                   <Circle
-                    center={position}
+                    center={person.Suburb}
                     radius={10000}
                     options={middleOptions}
                   />
                   <Circle
-                    center={position}
+                    center={person.Suburb}
                     radius={15000}
                     options={farOptions}
                   />
                 </>
               ))
             }
-          </MarkerClusterer> */}
+          </MarkerClusterer>
         </GoogleMap>
       </div>
     </div>
