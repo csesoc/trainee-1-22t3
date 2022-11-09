@@ -2,47 +2,31 @@ import React from "react";
 import { useState } from "react";
 import Papa from "papaparse";
 
-const UploadCSV = () => {
+const UploadCSV = ({ setDrivers, setPassengers }) => {
   // State to store parsed data
   const [parsedData, setParsedData] = useState([]);
 
   //State to store table Column name
   const [tableRows, setTableRows] = useState([]);
-
-  //State to store the values
-  const [values, setValues] = useState([]);
+  const rowsArray = ["Name", "Suburb", "Role"];
 
   const changeHandler = (event) => {
     Papa.parse(event.target.files[0], {
       header: true,
       complete: (results) => {
         console.log(results);
-        const rowsArray = ["Name", "Suburb", "Role"];
-        const valuesArray = [];
-
-        let data = [];
-
-        for (let obj of results.data) {
-          let asArray = Object.entries(obj);
-          asArray.shift();
-          for (let pair of asArray) {
-            pair.shift();
-          }
-          data.push(asArray);
-        }
-
-        data.map((d) => {
-          valuesArray.push(Object.values(d));
-        });
-
-        // Parsed Data Response in array format
-        setParsedData(results.data);
 
         // Filtered Column Names
         setTableRows(rowsArray);
 
-        // Filtered Values
-        setValues(valuesArray);
+        // Parsed Data Response in array format
+        setParsedData(results.data);
+
+        // Get drivers and passengers
+        setDrivers(parsedData.filter((person) => person.Role == "Driver"));
+        setPassengers(
+          parsedData.filter((person) => person.Role == "Passenger")
+        );
       },
     });
   };
@@ -65,13 +49,14 @@ const UploadCSV = () => {
           </tr>
         </thead>
         <tbody id="tableRow">
-          {values.map((value, index) => (
-            <tr key={index}>
-              {value.map((val, i) => (
-                <td key={i}>{val}</td>
-              ))}
-            </tr>
-          ))}
+          {parsedData &&
+            parsedData.map((parsedData, index) => (
+              <tr key={index}>
+                <td>{parsedData.Name}</td>
+                <td>{parsedData.Suburb}</td>
+                <td>{parsedData.Role}</td>
+              </tr>
+            ))}
         </tbody>
       </table>
     </div>

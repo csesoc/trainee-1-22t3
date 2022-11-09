@@ -12,7 +12,8 @@ import "./map.css";
 
 const Map = () => {
   const center = useMemo(() => ({ lat: -33.85, lng: 151 }), []);
-  const [driver, setDriver] = useState();
+  const [drivers, setDrivers] = useState();
+  const [passengers, setPassengers] = useState();
   const [directions, setDirections] = useState();
   const [style, setStyle] = useState(false);
   const mapRef = useRef();
@@ -28,11 +29,11 @@ const Map = () => {
   );
 
   const fetchDirections = async (position) => {
-    if (!driver) return;
+    if (!drivers) return;
     const service = new window.google.maps.DirectionsService();
     service.route(
       {
-        origin: driver,
+        origin: drivers,
         destination: position,
         travelMode: window.google.maps.TravelMode.DRIVING,
       },
@@ -48,24 +49,24 @@ const Map = () => {
     ? "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png"
     : "http://maps.google.com/mapfiles/ms/icons/blue-dot.png";
 
-  const passengers = [
-    [{ lat: -33.8234, lng: 151.1939 }, "MJ"],
-    [{ lat: -33.7961, lng: 151.178 }, "Raiyan"],
-    [{ lat: -33.8368, lng: 151.2073 }, "Rachel"],
-    [{ lat: -33.7457, lng: 151.1432 }, "Oscar"],
-    [{ lat: -33.7201, lng: 151.117 }, "James"],
-  ];
+  //   const passengers = [
+  //     [{ lat: -33.8234, lng: 151.1939 }, "MJ"],
+  //     [{ lat: -33.7961, lng: 151.178 }, "Raiyan"],
+  //     [{ lat: -33.8368, lng: 151.2073 }, "Rachel"],
+  //     [{ lat: -33.7457, lng: 151.1432 }, "Oscar"],
+  //     [{ lat: -33.7201, lng: 151.117 }, "James"],
+  //   ];
 
-  const drivers = [
-    [{ lat: -33.82, lng: 151.19 }, "Sally"],
-    [{ lat: -33.9646, lng: 151.101 }, "Sally 2"],
-  ];
+  //   const drivers = [
+  //     [{ lat: -33.82, lng: 151.19 }, "Sally"],
+  //     [{ lat: -33.9646, lng: 151.101 }, "Hellen"],
+  //   ];
 
   return (
     <div className="container">
       <div className="map">
         <div className="map__info">
-          <UploadCSV />
+          <UploadCSV setDrivers={setDrivers} setPassengers={setPassengers} />
         </div>
         <GoogleMap
           zoom={11}
@@ -74,7 +75,7 @@ const Map = () => {
           onLoad={onLoad}
           options={options}
         >
-          {directions && (
+          {/* {directions && (
             <DirectionsRenderer
               directions={directions}
               options={{
@@ -85,8 +86,8 @@ const Map = () => {
                 },
               }}
             />
-          )}
-          <MarkerClusterer>
+          )} */}
+          {/* <MarkerClusterer>
             {(clusterer) =>
               passengers.map(([position, title], i) => (
                 <Marker
@@ -97,7 +98,7 @@ const Map = () => {
                   clusterer={clusterer}
                   onClick={() => {
                     setStyle((current) => !current);
-                    fetchDirections(position);
+                    // fetchDirections(position);
                   }}
                 />
               ))
@@ -115,10 +116,6 @@ const Map = () => {
                       "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
                     }
                     clusterer={clusterer}
-                    onClick={() => {
-                      setStyle((current) => !current);
-                      fetchDirections(position);
-                    }}
                   />
                   <Circle
                     center={position}
@@ -138,7 +135,7 @@ const Map = () => {
                 </>
               ))
             }
-          </MarkerClusterer>
+          </MarkerClusterer> */}
         </GoogleMap>
       </div>
     </div>
