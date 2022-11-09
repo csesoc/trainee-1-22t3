@@ -7,7 +7,7 @@ import {
   DirectionsRenderer,
 } from "@react-google-maps/api";
 
-import Search from "./search";
+// import Search from "./search";
 import UploadCSV from "./uploadCSV";
 import "./map.css";
 

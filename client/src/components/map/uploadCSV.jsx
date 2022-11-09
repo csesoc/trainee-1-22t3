@@ -1,29 +1,79 @@
 import React from "react";
-import { UploadOutlined } from "@ant-design/icons";
-import { Button, message, Upload } from "antd";
+import { useState } from "react";
+import Papa from "papaparse";
 
 export default function UploadCSV() {
-  const props = {
-    name: "file",
-    action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
-    headers: {
-      authorization: "authorization-text",
-    },
-    onChange(info) {
-      if (info.file.status !== "uploading") {
-        console.log(info.file, info.fileList);
-      }
-      if (info.file.status === "done") {
-        message.success(`${info.file.name} file uploaded successfully`);
-      } else if (info.file.status === "error") {
-        message.error(`${info.file.name} file upload failed.`);
-      }
-    },
+  // State to store parsed data
+  const [parsedData, setParsedData] = useState([]);
+
+  //State to store table Column name
+  const [tableRows, setTableRows] = useState([]);
+
+  //State to store the values
+  const [values, setValues] = useState([]);
+
+  const changeHandler = (event) => {
+    Papa.parse(event.target.files[0], {
+      header: true,
+      complete: (results) => {
+        console.log(results);
+        const rowsArray = ["Name", "Suburb", "Role"];
+        const valuesArray = [];
+
+        let data = [];
+
+        for (let obj of results.data) {
+          let asArray = Object.entries(obj);
+          asArray.shift();
+          for (let pair of asArray) {
+            pair.shift();
+          }
+          data.push(asArray);
+        }
+
+        data.map((d) => {
+          valuesArray.push(Object.values(d));
+        });
+
+        // Parsed Data Response in array format
+        setParsedData(results.data);
+
+        // Filtered Column Names
+        setTableRows(rowsArray);
+
+        // Filtered Values
+        setValues(valuesArray);
+      },
+    });
   };
 
   return (
-    <Upload {...props}>
-      <Button icon={<UploadOutlined />}>Upload CSV File</Button>
-    </Upload>
+    <div className="returnedTable">
+      <input
+        type="file"
+        name="file"
+        onChange={changeHandler}
+        accept=".csv"
+        style={{ display: "block", margin: "10px auto" }}
+      />
+      <table>
+        <thead>
+          <tr id="tableHead">
+            {tableRows.map((rows, index) => (
+              <th key={index}>{rows}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody id="tableRow">
+          {values.map((value, index) => (
+            <tr key={index}>
+              {value.map((val, i) => (
+                <td key={i}>{val}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
