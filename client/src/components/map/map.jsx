@@ -20,7 +20,7 @@ const Map = () => {
   const onLoad = useCallback((map) => (mapRef.current = map), []);
   const options = useMemo(
     () => ({
-      // mapId: "b181cac70f27f5e6", // dark map
+      //   mapId: "b181cac70f27f5e6", // dark map
       mapId: "2ca571bbe60acfd2", // light map
       disableDefaultUI: true,
       clickableIcons: false,
