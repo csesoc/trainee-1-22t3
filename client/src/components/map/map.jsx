@@ -53,8 +53,6 @@ const Map = () => {
   //     );
   //   };
 
-  //   const labelStyle =
-
   const passengers = [
     { ID: 1, Name: "MJ", Suburb: { lat: -33.8234, lng: 151.1939 }, Group: "A" },
     {
@@ -139,7 +137,6 @@ const Map = () => {
                   }}
                   //   clusterer={clusterer}
                   onClick={() => {
-                    // setStyle((current) => !current);
                     // fetchDirections(position);
                     handleActiveMarker(person.ID);
                   }}
