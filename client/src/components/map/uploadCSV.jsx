@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 import Papa from "papaparse";
 
-const UploadCSV = () => {
+const UploadCSV = ({ setDrivers, setPassengers }) => {
   // State to store parsed data
   const [parsedData, setParsedData] = useState([]);
 
@@ -24,27 +24,28 @@ const UploadCSV = () => {
         setParsedData(results.data);
 
         // // Get drivers and passengers
-        // setDrivers(
-        //   results.data
-        //     .filter((person) => person.Role == "Driver")
-        //     .forEach(
-        //       (person) => (person.Suburb = findLatLong(`${person.Suburb} NSW`))
-        //     )
-        // );
-        // setPassengers(
-        //   results.data.filter((person) => person.Role == "Passenger")
-        // );
+        setDrivers(
+          results.data
+            .filter((person) => person.Role == "Driver")
+            .forEach(
+              (person) => (person.Suburb = findLatLong(`${person.Suburb} NSW`))
+            )
+        );
+        setPassengers(
+          results.data.filter((person) => person.Role == "Passenger")
+        );
       },
     });
   };
 
   const findLatLong = async (address) => {
     const geocoder = new window.google.maps.Geocoder();
-    console.log(address);
     geocoder.geocode({ address: address }, function (results, status) {
       if (status == "OK") {
-        console.log(results[0].geometry.location);
-        return results[0].geometry.location;
+        return {
+          lat: results[0].geometry.location.lat(),
+          lng: results[0].geometry.location.lng(),
+        };
       } else {
         alert("Geocode was not successful for the following reason: " + status);
       }
