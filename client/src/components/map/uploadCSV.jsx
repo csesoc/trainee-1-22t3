@@ -2,48 +2,52 @@ import React from "react";
 import { useState } from "react";
 import Papa from "papaparse";
 
-export default function UploadCSV() {
+const UploadCSV = () => {
   // State to store parsed data
   const [parsedData, setParsedData] = useState([]);
 
   //State to store table Column name
   const [tableRows, setTableRows] = useState([]);
 
-  //State to store the values
-  const [values, setValues] = useState([]);
+  const rowsArray = ["Name", "Suburb", "Role"];
 
   const changeHandler = (event) => {
     Papa.parse(event.target.files[0], {
       header: true,
       complete: (results) => {
         console.log(results);
-        const rowsArray = ["Name", "Suburb", "Role"];
-        const valuesArray = [];
-
-        let data = [];
-
-        for (let obj of results.data) {
-          let asArray = Object.entries(obj);
-          asArray.shift();
-          for (let pair of asArray) {
-            pair.shift();
-          }
-          data.push(asArray);
-        }
-
-        data.map((d) => {
-          valuesArray.push(Object.values(d));
-        });
-
-        // Parsed Data Response in array format
-        setParsedData(results.data);
 
         // Filtered Column Names
         setTableRows(rowsArray);
 
-        // Filtered Values
-        setValues(valuesArray);
+        // Parsed Data Response in array format
+        setParsedData(results.data);
+
+        // // Get drivers and passengers
+        // setDrivers(
+        //   results.data
+        //     .filter((person) => person.Role == "Driver")
+        //     .forEach(
+        //       (person) => (person.Suburb = findLatLong(`${person.Suburb} NSW`))
+        //     )
+        // );
+        // setPassengers(
+        //   results.data.filter((person) => person.Role == "Passenger")
+        // );
       },
+    });
+  };
+
+  const findLatLong = async (address) => {
+    const geocoder = new window.google.maps.Geocoder();
+    console.log(address);
+    geocoder.geocode({ address: address }, function (results, status) {
+      if (status == "OK") {
+        console.log(results[0].geometry.location);
+        return results[0].geometry.location;
+      } else {
+        alert("Geocode was not successful for the following reason: " + status);
+      }
     });
   };
 
@@ -65,15 +69,18 @@ export default function UploadCSV() {
           </tr>
         </thead>
         <tbody id="tableRow">
-          {values.map((value, index) => (
-            <tr key={index}>
-              {value.map((val, i) => (
-                <td key={i}>{val}</td>
-              ))}
-            </tr>
-          ))}
+          {parsedData &&
+            parsedData.map((person, index) => (
+              <tr key={index}>
+                <td>{person.Name}</td>
+                <td>{person.Suburb}</td>
+                <td>{person.Role}</td>
+              </tr>
+            ))}
         </tbody>
       </table>
     </div>
   );
-}
+};
+
+export default UploadCSV;

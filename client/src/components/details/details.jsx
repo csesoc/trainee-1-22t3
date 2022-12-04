@@ -47,7 +47,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   justifyContent: "flex-end",
 }));
 
-export default function Details({ body }) {
+const Details = ({ body }) => {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
@@ -60,7 +60,13 @@ export default function Details({ body }) {
   };
 
   return (
-    <Box sx={{ display: "flex", fontFamily:"Poppins", backgroundColor:"rgb(246, 250, 253)" }}>
+    <Box
+      sx={{
+        display: "flex",
+        fontFamily: "Poppins",
+        backgroundColor: "rgb(246, 250, 253)",
+      }}
+    >
       <CssBaseline />
       <div position="fixed" open={open}>
         <Toolbar>
@@ -88,7 +94,7 @@ export default function Details({ body }) {
         anchor="left"
         open={open}
       >
-        <DrawerHeader >
+        <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === "ltr" ? (
               <ChevronLeftIcon />
@@ -130,4 +136,6 @@ export default function Details({ body }) {
       </Main>
     </Box>
   );
-}
+};
+
+export default Details;
