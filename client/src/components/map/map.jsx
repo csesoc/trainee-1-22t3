@@ -5,6 +5,7 @@ import {
   Circle,
   MarkerClusterer,
   DirectionsRenderer,
+  InfoWindow,
 } from "@react-google-maps/api";
 
 import UploadCSV from "./uploadCSV";
@@ -14,8 +15,15 @@ const Map = () => {
   const center = useMemo(() => ({ lat: -33.85, lng: 151 }), []);
   //   const [drivers, setDrivers] = useState();
   //   const [passengers, setPassengers] = useState();
-  const [directions, setDirections] = useState();
-  const [style, setStyle] = useState(false);
+  //   const [directions, setDirections] = useState();
+  const [activeMarker, setActiveMarker] = useState(null);
+  const handleActiveMarker = (marker) => {
+    if (marker === activeMarker) {
+      return;
+    }
+    setActiveMarker(marker);
+  };
+
   const mapRef = useRef();
   const onLoad = useCallback((map) => (mapRef.current = map), []);
   const options = useMemo(
@@ -45,21 +53,42 @@ const Map = () => {
   //     );
   //   };
 
-  const iconStyle = style
-    ? "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png"
-    : "http://maps.google.com/mapfiles/ms/icons/blue-dot.png";
-
   const passengers = [
-    { Name: "MJ", Suburb: { lat: -33.8234, lng: 151.1939 } },
-    { Name: "Raiyan", Suburb: { lat: -33.7961, lng: 151.178 } },
-    { Name: "Rachel", Suburb: { lat: -33.8368, lng: 151.2073 } },
-    { Name: "Oscar", Suburb: { lat: -33.7457, lng: 151.1432 } },
-    { Name: "James", Suburb: { lat: -33.7201, lng: 151.117 } },
+    { ID: 1, Name: "MJ", Suburb: { lat: -33.8234, lng: 151.1939 }, Group: "A" },
+    {
+      ID: 2,
+      Name: "Raiyan",
+      Suburb: { lat: -33.7961, lng: 151.178 },
+      Group: "B",
+    },
+    {
+      ID: 3,
+      Name: "Rachel",
+      Suburb: { lat: -33.8368, lng: 151.2073 },
+      Group: "B",
+    },
+    {
+      ID: 4,
+      Name: "Oscar",
+      Suburb: { lat: -33.7457, lng: 151.1432 },
+      Group: "A",
+    },
+    {
+      ID: 5,
+      Name: "James",
+      Suburb: { lat: -33.7201, lng: 151.117 },
+      Group: "A",
+    },
   ];
 
   const drivers = [
-    { Name: "Sally", Suburb: { lat: -33.82, lng: 151.19 } },
-    { Name: "Hellen", Suburb: { lat: -33.9646, lng: 151.101 } },
+    { ID: 6, Name: "Sally", Suburb: { lat: -33.82, lng: 151.19 }, Group: "A" },
+    {
+      ID: 7,
+      Name: "Hellen",
+      Suburb: { lat: -33.9646, lng: 151.101 },
+      Group: "B",
+    },
   ];
 
   return (
@@ -96,13 +125,28 @@ const Map = () => {
                   key={i}
                   position={person.Suburb}
                   title={`${i + 1}. ${person.Name}`}
-                  icon={iconStyle}
-                  clusterer={clusterer}
-                  onClick={() => {
-                    setStyle((current) => !current);
-                    // fetchDirections(position);
+                  label={{
+                    text: person.Group,
+                    color: "#ffffff",
+                    fontWeight: "bold",
+                    fontSize: "12px",
                   }}
-                />
+                  icon={{
+                    url: "http://maps.google.com/mapfiles/ms/micons/pink.png",
+                    labelOrigin: new window.google.maps.Point(16, 10),
+                  }}
+                  //   clusterer={clusterer}
+                  onClick={() => {
+                    // fetchDirections(position);
+                    handleActiveMarker(person.ID);
+                  }}
+                >
+                  {activeMarker === person.ID ? (
+                    <InfoWindow onCloseClick={() => setActiveMarker(null)}>
+                      <div>{person.Name}</div>
+                    </InfoWindow>
+                  ) : null}
+                </Marker>
               ))
             }
           </MarkerClusterer>
@@ -114,11 +158,29 @@ const Map = () => {
                     key={i}
                     position={person.Suburb}
                     title={`${i + 1}. ${person.Name}`}
-                    icon={
-                      "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
-                    }
+                    icon={{
+                      url: "http://maps.google.com/mapfiles/ms/micons/purple.png",
+                      labelOrigin: new window.google.maps.Point(16, 10),
+                    }}
+                    label={{
+                      text: person.Group,
+                      color: "#ffffff",
+                      fontWeight: "bold",
+                      fontSize: "12px",
+                    }}
                     clusterer={clusterer}
-                  />
+                    onClick={() => {
+                      // setStyle((current) => !current);
+                      // fetchDirections(position);
+                      handleActiveMarker(person.ID);
+                    }}
+                  >
+                    {activeMarker === person.ID ? (
+                      <InfoWindow onCloseClick={() => setActiveMarker(null)}>
+                        <div>{person.Name}</div>
+                      </InfoWindow>
+                    ) : null}
+                  </Marker>
                   <Circle
                     center={person.Suburb}
                     radius={5000}
