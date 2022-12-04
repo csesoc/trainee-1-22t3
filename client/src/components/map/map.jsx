@@ -14,8 +14,8 @@ const Map = () => {
   const center = useMemo(() => ({ lat: -33.85, lng: 151 }), []);
   //   const [drivers, setDrivers] = useState();
   //   const [passengers, setPassengers] = useState();
-//   const [directions, setDirections] = useState();
-//   const [style, setStyle] = useState(false);
+  const [directions, setDirections] = useState();
+  const [style, setStyle] = useState(false);
   const mapRef = useRef();
   const onLoad = useCallback((map) => (mapRef.current = map), []);
   const options = useMemo(
@@ -45,21 +45,21 @@ const Map = () => {
   //     );
   //   };
 
-//   const iconStyle = style
-//     ? "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png"
-//     : "http://maps.google.com/mapfiles/ms/icons/blue-dot.png";
+  const iconStyle = style
+    ? "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png"
+    : "http://maps.google.com/mapfiles/ms/icons/blue-dot.png";
 
   const passengers = [
-    { Name: "MJ", Suburb: { lat: -33.8234, lng: 151.1939 }, Group: "A" },
-    { Name: "Raiyan", Suburb: { lat: -33.7961, lng: 151.178 }, Group: "B" },
-    { Name: "Rachel", Suburb: { lat: -33.8368, lng: 151.2073 }, Group: "B" },
-    { Name: "Oscar", Suburb: { lat: -33.7457, lng: 151.1432 }, Group: "A" },
-    { Name: "James", Suburb: { lat: -33.7201, lng: 151.117 }, Group: "A" },
+    { Name: "MJ", Suburb: { lat: -33.8234, lng: 151.1939 } },
+    { Name: "Raiyan", Suburb: { lat: -33.7961, lng: 151.178 } },
+    { Name: "Rachel", Suburb: { lat: -33.8368, lng: 151.2073 } },
+    { Name: "Oscar", Suburb: { lat: -33.7457, lng: 151.1432 } },
+    { Name: "James", Suburb: { lat: -33.7201, lng: 151.117 } },
   ];
 
   const drivers = [
-    { Name: "Sally", Suburb: { lat: -33.82, lng: 151.19 }, Group: "A" },
-    { Name: "Hellen", Suburb: { lat: -33.9646, lng: 151.101 }, Group: "B" },
+    { Name: "Sally", Suburb: { lat: -33.82, lng: 151.19 } },
+    { Name: "Hellen", Suburb: { lat: -33.9646, lng: 151.101 } },
   ];
 
   return (
@@ -96,13 +96,12 @@ const Map = () => {
                   key={i}
                   position={person.Suburb}
                   title={`${i + 1}. ${person.Name}`}
-                  label={person.Group}
-                //   icon={iconStyle}
+                  icon={iconStyle}
                   clusterer={clusterer}
-                //   onClick={() => {
-                    // setStyle((current) => !current);
+                  onClick={() => {
+                    setStyle((current) => !current);
                     // fetchDirections(position);
-                //   }}
+                  }}
                 />
               ))
             }
@@ -115,10 +114,9 @@ const Map = () => {
                     key={i}
                     position={person.Suburb}
                     title={`${i + 1}. ${person.Name}`}
-                    // icon={
-                    //   "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
-                    // }
-                    label={person.Group}
+                    icon={
+                      "http://maps.google.com/mapfiles/ms/icons/red-dot.png"
+                    }
                     clusterer={clusterer}
                   />
                   <Circle
