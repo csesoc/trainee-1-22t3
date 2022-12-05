@@ -13,9 +13,9 @@ import "./map.css";
 
 const Map = () => {
   const center = useMemo(() => ({ lat: -33.85, lng: 151 }), []);
-  const [drivers, setDrivers] = useState();
-  const [passengers, setPassengers] = useState();
-  //   const [directions, setDirections] = useState();
+  //   const [drivers, setDrivers] = useState();
+  //   const [passengers, setPassengers] = useState();
+  const [directions, setDirections] = useState();
   const [activeMarker, setActiveMarker] = useState(null);
   const handleActiveMarker = (marker) => {
     if (marker === activeMarker) {
@@ -36,66 +36,70 @@ const Map = () => {
     []
   );
 
-  //   const fetchDirections = async (position) => {
-  //     if (!driver) return;
-  //     const service = new window.google.maps.DirectionsService();
-  //     service.route(
-  //       {
-  //         origin: driver,
-  //         destination: position,
-  //         travelMode: window.google.maps.TravelMode.DRIVING,
-  //       },
-  //       (result, status) => {
-  //         if (status === "OK" && result) {
-  //           setDirections(result);
-  //         }
-  //       }
-  //     );
-  //   };
+  const fetchDirections = async (person) => {
+    const driver = drivers.filter((d) => d.Group == person.Group)[0];
+    if (!driver) return;
+    console.log(driver.Name);
+    const service = new window.google.maps.DirectionsService();
+    service.route(
+      {
+        origin: driver.Suburb,
+        destination: person.Suburb,
+        travelMode: window.google.maps.TravelMode.DRIVING,
+      },
+      (result, status) => {
+        if (status === "OK" && result) {
+          setDirections(result);
+        }
+      }
+    );
+  };
 
-  //   const passengers = [
-  //     { ID: 1, Name: "MJ", Suburb: { lat: -33.8234, lng: 151.1939 }, Group: "A" },
-  //     {
-  //       ID: 2,
-  //       Name: "Raiyan",
-  //       Suburb: { lat: -33.7961, lng: 151.178 },
-  //       Group: "B",
-  //     },
-  //     {
-  //       ID: 3,
-  //       Name: "Rachel",
-  //       Suburb: { lat: -33.8368, lng: 151.2073 },
-  //       Group: "B",
-  //     },
-  //     {
-  //       ID: 4,
-  //       Name: "Oscar",
-  //       Suburb: { lat: -33.7457, lng: 151.1432 },
-  //       Group: "A",
-  //     },
-  //     {
-  //       ID: 5,
-  //       Name: "James",
-  //       Suburb: { lat: -33.7201, lng: 151.117 },
-  //       Group: "A",
-  //     },
-  //   ];
+  const passengers = [
+    { ID: 1, Name: "MJ", Suburb: { lat: -33.8234, lng: 151.1939 }, Group: "A" },
+    {
+      ID: 2,
+      Name: "Raiyan",
+      Suburb: { lat: -33.7961, lng: 151.178 },
+      Group: "B",
+    },
+    {
+      ID: 3,
+      Name: "Rachel",
+      Suburb: { lat: -33.8368, lng: 151.2073 },
+      Group: "B",
+    },
+    {
+      ID: 4,
+      Name: "Oscar",
+      Suburb: { lat: -33.7457, lng: 151.1432 },
+      Group: "A",
+    },
+    {
+      ID: 5,
+      Name: "James",
+      Suburb: { lat: -33.7201, lng: 151.117 },
+      Group: "A",
+    },
+  ];
 
-  //   const drivers = [
-  //     { ID: 6, Name: "Sally", Suburb: { lat: -33.82, lng: 151.19 }, Group: "A" },
-  //     {
-  //       ID: 7,
-  //       Name: "Hellen",
-  //       Suburb: { lat: -33.9646, lng: 151.101 },
-  //       Group: "B",
-  //     },
-  //   ];
+  const drivers = [
+    { ID: 6, Name: "Sally", Suburb: { lat: -33.82, lng: 151.19 }, Group: "A" },
+    {
+      ID: 7,
+      Name: "Hellen",
+      Suburb: { lat: -33.9646, lng: 151.101 },
+      Group: "B",
+    },
+  ];
 
   return (
     <div className="container">
       <div className="map">
         <div className="map__info">
-          <UploadCSV setDrivers={setDrivers} setPassengers={setPassengers} />
+          <UploadCSV
+          //   setDrivers={setDrivers} setPassengers={setPassengers}
+          />
         </div>
         <GoogleMap
           zoom={11}
@@ -104,10 +108,11 @@ const Map = () => {
           onLoad={onLoad}
           options={options}
         >
-          {/* {directions && (
+          {directions && (
             <DirectionsRenderer
               directions={directions}
               options={{
+                suppressMarkers: true,
                 polyLineOptions: {
                   zIndex: 50,
                   strokeColor: "#1976d2",
@@ -115,7 +120,7 @@ const Map = () => {
                 },
               }}
             />
-          )} */}
+          )}
           <MarkerClusterer>
             {(clusterer) =>
               passengers.map((person, i) => (
@@ -135,7 +140,7 @@ const Map = () => {
                   }}
                   //   clusterer={clusterer}
                   onClick={() => {
-                    // fetchDirections(position);
+                    fetchDirections(person);
                     handleActiveMarker(person.ID);
                   }}
                 >
@@ -168,7 +173,6 @@ const Map = () => {
                     }}
                     clusterer={clusterer}
                     onClick={() => {
-                      //   fetchDirections(position);
                       handleActiveMarker(person.ID);
                     }}
                   >

@@ -23,34 +23,34 @@ const UploadCSV = ({ setDrivers, setPassengers }) => {
         // Parsed Data Response in array format
         setParsedData(results.data);
 
-        // // Get drivers and passengers
-        setDrivers(
-          results.data
-            .filter((person) => person.Role == "Driver")
-            .forEach(
-              (person) => (person.Suburb = findLatLong(`${person.Suburb} NSW`))
-            )
-        );
-        setPassengers(
-          results.data.filter((person) => person.Role == "Passenger")
-        );
+        // Get drivers and passengers
+        // setDrivers(
+        //   results.data
+        //     .filter((person) => person.Role == "Driver")
+        //     .forEach(
+        //       (person) => (person.Suburb = findLatLong(`${person.Suburb} NSW`))
+        //     )
+        // );
+        // setPassengers(
+        //   results.data.filter((person) => person.Role == "Passenger")
+        // );
       },
     });
   };
 
-  const findLatLong = async (address) => {
-    const geocoder = new window.google.maps.Geocoder();
-    geocoder.geocode({ address: address }, function (results, status) {
-      if (status == "OK") {
-        return {
-          lat: results[0].geometry.location.lat(),
-          lng: results[0].geometry.location.lng(),
-        };
-      } else {
-        alert("Geocode was not successful for the following reason: " + status);
-      }
-    });
-  };
+  //   const findLatLong = async (address) => {
+  //     const geocoder = new window.google.maps.Geocoder();
+  //     geocoder.geocode({ address: address }, function (results, status) {
+  //       if (status == "OK") {
+  //         return {
+  //           lat: results[0].geometry.location.lat(),
+  //           lng: results[0].geometry.location.lng(),
+  //         };
+  //       } else {
+  //         alert("Geocode was not successful for the following reason: " + status);
+  //       }
+  //     });
+  //   };
 
   return (
     <div className="returnedTable">
