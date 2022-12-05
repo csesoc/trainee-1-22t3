@@ -15,7 +15,7 @@ const Map = () => {
   const center = useMemo(() => ({ lat: -33.85, lng: 151 }), []);
   //   const [drivers, setDrivers] = useState();
   //   const [passengers, setPassengers] = useState();
-  //   const [directions, setDirections] = useState();
+  const [directions, setDirections] = useState();
   const [activeMarker, setActiveMarker] = useState(null);
   const handleActiveMarker = (marker) => {
     if (marker === activeMarker) {
@@ -36,22 +36,24 @@ const Map = () => {
     []
   );
 
-  //   const fetchDirections = async (position) => {
-  //     if (!driver) return;
-  //     const service = new window.google.maps.DirectionsService();
-  //     service.route(
-  //       {
-  //         origin: driver,
-  //         destination: position,
-  //         travelMode: window.google.maps.TravelMode.DRIVING,
-  //       },
-  //       (result, status) => {
-  //         if (status === "OK" && result) {
-  //           setDirections(result);
-  //         }
-  //       }
-  //     );
-  //   };
+  const fetchDirections = async (person) => {
+    const driver = drivers.filter((d) => d.Group == person.Group)[0];
+    if (!driver) return;
+    console.log(driver.Name);
+    const service = new window.google.maps.DirectionsService();
+    service.route(
+      {
+        origin: driver.Suburb,
+        destination: person.Suburb,
+        travelMode: window.google.maps.TravelMode.DRIVING,
+      },
+      (result, status) => {
+        if (status === "OK" && result) {
+          setDirections(result);
+        }
+      }
+    );
+  };
 
   const passengers = [
     { ID: 1, Name: "MJ", Suburb: { lat: -33.8234, lng: 151.1939 }, Group: "A" },
@@ -106,10 +108,11 @@ const Map = () => {
           onLoad={onLoad}
           options={options}
         >
-          {/* {directions && (
+          {directions && (
             <DirectionsRenderer
               directions={directions}
               options={{
+                suppressMarkers: true,
                 polyLineOptions: {
                   zIndex: 50,
                   strokeColor: "#1976d2",
@@ -117,7 +120,7 @@ const Map = () => {
                 },
               }}
             />
-          )} */}
+          )}
           <MarkerClusterer>
             {(clusterer) =>
               passengers.map((person, i) => (
@@ -137,7 +140,7 @@ const Map = () => {
                   }}
                   //   clusterer={clusterer}
                   onClick={() => {
-                    // fetchDirections(position);
+                    fetchDirections(person);
                     handleActiveMarker(person.ID);
                   }}
                 >
@@ -170,8 +173,6 @@ const Map = () => {
                     }}
                     clusterer={clusterer}
                     onClick={() => {
-                      // setStyle((current) => !current);
-                      // fetchDirections(position);
                       handleActiveMarker(person.ID);
                     }}
                   >

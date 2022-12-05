@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 import Papa from "papaparse";
 
-const UploadCSV = () => {
+const UploadCSV = ({ setDrivers, setPassengers }) => {
   // State to store parsed data
   const [parsedData, setParsedData] = useState([]);
 
@@ -23,7 +23,7 @@ const UploadCSV = () => {
         // Parsed Data Response in array format
         setParsedData(results.data);
 
-        // // Get drivers and passengers
+        // Get drivers and passengers
         // setDrivers(
         //   results.data
         //     .filter((person) => person.Role == "Driver")
@@ -38,18 +38,19 @@ const UploadCSV = () => {
     });
   };
 
-  const findLatLong = async (address) => {
-    const geocoder = new window.google.maps.Geocoder();
-    console.log(address);
-    geocoder.geocode({ address: address }, function (results, status) {
-      if (status == "OK") {
-        console.log(results[0].geometry.location);
-        return results[0].geometry.location;
-      } else {
-        alert("Geocode was not successful for the following reason: " + status);
-      }
-    });
-  };
+  //   const findLatLong = async (address) => {
+  //     const geocoder = new window.google.maps.Geocoder();
+  //     geocoder.geocode({ address: address }, function (results, status) {
+  //       if (status == "OK") {
+  //         return {
+  //           lat: results[0].geometry.location.lat(),
+  //           lng: results[0].geometry.location.lng(),
+  //         };
+  //       } else {
+  //         alert("Geocode was not successful for the following reason: " + status);
+  //       }
+  //     });
+  //   };
 
   return (
     <div className="returnedTable">
