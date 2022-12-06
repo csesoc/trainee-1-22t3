@@ -36,11 +36,10 @@ const Map = () => {
     []
   );
 
+  const service = new window.google.maps.DirectionsService();
   const fetchDirections = async (person) => {
     const driver = drivers.filter((d) => d.Group == person.Group)[0];
     if (!driver) return;
-    console.log(driver.Name);
-    const service = new window.google.maps.DirectionsService();
     service.route(
       {
         origin: driver.Suburb,
