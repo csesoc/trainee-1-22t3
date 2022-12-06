@@ -11,7 +11,7 @@ import {
 } from "@reach/combobox";
 import "@reach/combobox/styles.css";
 
-export default function Search({ setAddress }) {
+const Search = ({ setDriver }) => {
   const {
     ready,
     value,
@@ -25,7 +25,7 @@ export default function Search({ setAddress }) {
     clearSuggestions();
     const results = await getGeocode({ address: val });
     const { lat, lng } = await getLatLng(results[0]);
-    setAddress({ lat, lng });
+    setDriver({ lat, lng });
   };
 
   return (
@@ -47,4 +47,6 @@ export default function Search({ setAddress }) {
       </ComboboxPopover>
     </Combobox>
   );
-}
+};
+
+export default Search;
