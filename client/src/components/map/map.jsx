@@ -16,16 +16,15 @@ const Map = () => {
   const [drivers, setDrivers] = useState([]);
   const [passengers, setPassengers] = useState([]);
   const [directions, setDirections] = useState();
+  const [hotel, setHotel] = useState([]);
   const [activeMarker, setActiveMarker] = useState(null);
+
   const handleActiveMarker = (marker) => {
     if (marker === activeMarker) {
       return;
     }
     setActiveMarker(marker);
   };
-
-  console.log(passengers);
-  console.log(drivers);
 
   // useEffect(() => {
   //   setPassengers([
@@ -102,7 +101,11 @@ const Map = () => {
     <div className="container">
       <div className="map">
         <div className="map__info">
-          <UploadCSV setDrivers={setDrivers} setPassengers={setPassengers} />
+          <UploadCSV
+            setDrivers={setDrivers}
+            setPassengers={setPassengers}
+            setHotel={setHotel}
+          />
         </div>
         <GoogleMap
           zoom={11}
@@ -124,6 +127,7 @@ const Map = () => {
               }}
             />
           )}
+
           <MarkerClusterer>
             {(clusterer) =>
               passengers.map((person, i) => (
@@ -139,6 +143,37 @@ const Map = () => {
                   }}
                   icon={{
                     url: "http://maps.google.com/mapfiles/ms/micons/pink.png",
+                    labelOrigin: new window.google.maps.Point(16, 10),
+                  }}
+                  onClick={() => {
+                    fetchDirections(person);
+                    handleActiveMarker(person.ID);
+                  }}
+                >
+                  {activeMarker === person.ID ? (
+                    <InfoWindow onCloseClick={() => setActiveMarker(null)}>
+                      <div>{person.Name}</div>
+                    </InfoWindow>
+                  ) : null}
+                </Marker>
+              ))
+            }
+          </MarkerClusterer>
+          <MarkerClusterer>
+            {(clusterer) =>
+              hotel.map((person, i) => (
+                <Marker
+                  key={i}
+                  position={person.Suburb}
+                  title={`${i + 1}. ${person.Name}`}
+                  label={{
+                    text: person.Group,
+                    color: "#ffffff",
+                    fontWeight: "bold",
+                    fontSize: "12px",
+                  }}
+                  icon={{
+                    url: "http://maps.google.com/mapfiles/ms/micons/red.png",
                     labelOrigin: new window.google.maps.Point(16, 10),
                   }}
                   onClick={() => {

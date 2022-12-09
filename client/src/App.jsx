@@ -13,6 +13,7 @@ function App() {
   });
 
   if (!isLoaded) return <div>Loading...</div>;
+
   return (
     <>
       <Details

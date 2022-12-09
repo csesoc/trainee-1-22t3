@@ -2,81 +2,32 @@
 from venv import create
 from ortools.constraint_solver import routing_enums_pb2
 from ortools.constraint_solver import pywrapcp
+from server.distance import construct_distance_matrix
 
-def create_data_model():
 
+
+
+def create_data_model(query_response):
     data = {}
-    data['distance_matrix'] = [
-        [
-        ]]
-    data['hotel'] = 0
-    
+    data['API_key'] = 'AIzaSyBvChWmi1hl5drsquInQ-ag3OLpylkQC2E'  
+    data['starts'] = []
+    for idx, entity in enumerate(query_response):
+        if entity['Role'].lower() == 'hotel':
+            data['hotel'] = idx
+        elif entity['Role'].lower() == 'driver':
+            data['starts'].append(idx)
+
+    # data['distance_matrix'] = []
     data['demands'] = [1 for _ in range(len(data['distance_matrix']))]
-    data['vehicle_capacities'] = [5, 5, 5, 5, 4, 5, 4, 5, 5]
-    data['starts']          = [1, 2, 3, 4, 5, 6, 7, 8, 9]
-    '''
-        "Maroubra", # 
-        "Kensington",# 
-        "Minto", #
-        "Carlingford", #
-        "Penshurst", #
-        "Mascot", # 
-        "Hurstville", # 
-        "Banksia", #
-        "Marsden Park", # 
-    
-    '''
-    data['ends']            = [data['hotel'] for i in range(len(data['starts']))]
+    data['vehicle_capacities'] = [5 for _ in range(len(data['starts']))]
+    data['ends'] = [data['hotel'] for i in range(len(data['starts']))]
     data['num_vehicles'] = len(data['starts'])
+    data['addresses'] = [entity['suburb']['name'] + '+NSW+Australia' for entity in query_response]
     return data
 
 
-def print_solution(data, manager, routing, solution):
-    suburbs = [
-        "RT House",
-        "Maroubra", # 
-        "Kensington",# 
-        "Minto", #
-        "Carlingford", #
-        "Penshurst", #
-        "Mascot", # 
-        "Hurstville", # 
-        "Banksia", #
-        "Marsden Park", #
-        "Kogarah",
-        "Rockdale",
-        "Hurstville",
-        "Kogarah",
-        "West Pennant Hills",
-        "Baulkham Hills",
-        "North Ryde",
-        "Burwood",
-        "Ermington",
-        "Parramatta",
-        "Penshurst",
-        "Beecroft",
-        "Sylvania",
-        "Carlingford",
-        "Kingsford",
-        "Liverpool",
-        "Campsie",
-        "Newtown",
-        "Croydon",
-        "Greystanes",
-        "Carlingford",
-        "Eastwood",
-        "Jannali",
-        "Epping",
-        "Epping",
-        "Rhodes",
-        "Ermington",
-        "Rhodes",
-        "Baulkham Hills",
-        "Auburn",
-        "Turramurra",
-        "Kensington",
-        "Hunters Hill",
-    ]
+def print_solution(data, manager, routing, solution, query_response):
+    
     """Prints solution on console."""
     print(f'Objective: {solution.ObjectiveValue()}')
     total_distance = 0
@@ -89,12 +40,12 @@ def print_solution(data, manager, routing, solution):
         while not routing.IsEnd(index):
             node_index = manager.IndexToNode(index)
             route_load += data['demands'][node_index]
-            plan_output += ' {0} [{1}] -> '.format(suburbs[node_index], route_load)
+            plan_output += ' {0} [{1}] -> '.format(query_response[node_index]['name'], route_load)
             previous_index = index
             index = solution.Value(routing.NextVar(index))
             route_distance += routing.GetArcCostForVehicle(
                 previous_index, index, vehicle_id)
-        plan_output += ' {0} [{1}]\n'.format(suburbs[manager.IndexToNode(index)],
+        plan_output += ' {0} [{1}]\n'.format(query_response[manager.IndexToNode(index)]['name'],
                                                  route_load)
         plan_output += 'Distance of the route: {}m\n'.format(route_distance)
         plan_output += 'Total passengers picked up: {}\n'.format(route_load)
@@ -105,11 +56,9 @@ def print_solution(data, manager, routing, solution):
     print('Total passengers of all routes: {}'.format(total_load))
 
 
-def main():
-    """Solve the CVRP problem."""
-    # Instantiate the data problem.
-    data = create_data_model()
-
+def initiate_allocation(query_response):
+    data = create_data_model(query_response)
+    data['distance_matrix'] = construct_distance_matrix(data)
     # Create the routing index manager.
     manager = pywrapcp.RoutingIndexManager(len(data['distance_matrix']),
                                            data['num_vehicles'], data['starts'], data['ends'])
@@ -174,7 +123,7 @@ def main():
         print_solution(data, manager, routing, solution)
     else: 
         print("No solution found - Possibly need more vehicles")
-main()
-data = create_data_model()
-print(len(data['distance_matrix']))
-print(len(data['distance_matrix'][0]))
+
+
+# print(len(data['distance_matrix']))
+# print(len(data['distance_matrix'][0]))

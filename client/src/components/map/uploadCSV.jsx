@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Papa from "papaparse";
+import { LineAxisOutlined } from "@mui/icons-material";
 
-const UploadCSV = ({ setDrivers, setPassengers }) => {
+const UploadCSV = ({ setDrivers, setPassengers, setHotel }) => {
   const [parsedData, setParsedData] = useState([]);
   const [tableCols, setTableCols] = useState([]);
 
   const rowsArray = ["Name", "Suburb", "Role"];
-
+  console.log("test");
   const changeHandler = async (event) => {
     Papa.parse(event.target.files[0], {
       header: true,
@@ -24,12 +25,12 @@ const UploadCSV = ({ setDrivers, setPassengers }) => {
             ID: idx,
             Group: "A",
             Suburb: {
+              name: person.Suburb,
               lat: results.results[0].geometry.location.lat(),
               lng: results.results[0].geometry.location.lng(),
             },
           }))
         );
-
         Promise.all(processedPeople).then((resolvedPeople) => {
           setDrivers(
             resolvedPeople.filter((person) => person.Role === "Driver")
@@ -37,9 +38,47 @@ const UploadCSV = ({ setDrivers, setPassengers }) => {
           setPassengers(
             resolvedPeople.filter((person) => person.Role === "Passenger")
           );
+          setHotel(
+            // TODO: improve the naming of this later
+            resolvedPeople.filter((person) => person.Role === "Hotel")
+          );
+          console.log("test1234s");
+
+          // useEffect(() => {
+          try {
+            fetch("localhost:5000/allocate", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(constructSchema(resolvedPeople)),
+            })
+              .then((res) => res.json())
+              .then((data) => console.log(data));
+          } catch (error) {
+            console.log(error);
+          }
+
+          // }, []);
         });
       },
     });
+  };
+
+  const constructSchema = (resolvedDataObjects) => {
+    let query = [];
+
+    for (let val of resolvedDataObjects) {
+      console.log(val);
+      let obj = {
+        name: val.Name,
+        role: val.Role.toLowerCase(),
+        suburb: val.Suburb,
+      };
+      query.push(obj);
+    }
+    console.log(query);
+    return query;
   };
 
   const geocoder = new window.google.maps.Geocoder();

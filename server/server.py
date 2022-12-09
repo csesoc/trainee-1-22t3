@@ -1,6 +1,7 @@
 
 from flask import Flask, request
 import json
+from server.vehicle_allocation import initiate_allocation
 from validate_schema import validateJSON
 
 app = Flask(__name__)
@@ -14,8 +15,7 @@ def get_optimal_allocation():
         print("Valid JSON")
     else:
         print("Invalid JSON")
-    
-    
+    initiate_allocation(res)
     return json.dumps({})
 
 if __name__ == "__main__":

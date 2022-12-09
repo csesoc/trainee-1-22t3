@@ -1,3 +1,4 @@
+
 import pymongo
 import os
 from dotenv import load_dotenv
@@ -15,9 +16,10 @@ def insert_data(data):
 
 
 def query_existence_of_suburb(suburb_name_list):
-    res = collection.find_one({"suburb.name": })
-    for data in res:
-        print(data)
+    pass
+    # res = collection.find_one({"suburb.name": })
+    # for data in res:
+    #     print(data)
 
 def add_new_suburb(suburb_name, lat, lon):
     collection.insert({
@@ -28,7 +30,7 @@ def add_new_suburb(suburb_name, lat, lon):
         }
     })
     
-query_existence_of_suburb( ["marsden park", "kensington", "maroubra"])
+# query_existence_of_suburb( ["marsden park", "kensington", "maroubra"])
 # add_new_suburb("marsden park", 1, 2)
 
 
