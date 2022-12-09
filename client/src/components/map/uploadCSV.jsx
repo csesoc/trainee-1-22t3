@@ -1,56 +1,58 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import Papa from "papaparse";
 
 const UploadCSV = ({ setDrivers, setPassengers }) => {
-  // State to store parsed data
   const [parsedData, setParsedData] = useState([]);
-
-  //State to store table Column name
-  const [tableRows, setTableRows] = useState([]);
+  const [tableCols, setTableCols] = useState([]);
 
   const rowsArray = ["Name", "Suburb", "Role"];
 
-  const changeHandler = (event) => {
+  const changeHandler = async (event) => {
     Papa.parse(event.target.files[0], {
       header: true,
       complete: (results) => {
-        console.log(results);
-
         // Filtered Column Names
-        setTableRows(rowsArray);
+        setTableCols(rowsArray);
 
         // Parsed Data Response in array format
         setParsedData(results.data);
 
-        // Get drivers and passengers
-        // setDrivers(
-        //   results.data
-        //     .filter((person) => person.Role == "Driver")
-        //     .forEach(
-        //       (person) => (person.Suburb = findLatLong(`${person.Suburb} NSW`))
-        //     )
-        // );
-        // setPassengers(
-        //   results.data.filter((person) => person.Role == "Passenger")
-        // );
+        // Add latitude/longitude and ID to people data
+        const processedPeople = results.data.map((person, idx) =>
+          findLatLong(`${person.Suburb} NSW`).then((results) => ({
+            ...person,
+            ID: idx,
+            Group: "A",
+            Suburb: {
+              lat: results.results[0].geometry.location.lat(),
+              lng: results.results[0].geometry.location.lng(),
+            },
+          }))
+        );
+
+        Promise.all(processedPeople).then((resolvedPeople) => {
+          setDrivers(
+            resolvedPeople.filter((person) => person.Role === "Driver")
+          );
+          setPassengers(
+            resolvedPeople.filter((person) => person.Role === "Passenger")
+          );
+        });
       },
     });
   };
 
-  //   const findLatLong = async (address) => {
-  //     const geocoder = new window.google.maps.Geocoder();
-  //     geocoder.geocode({ address: address }, function (results, status) {
-  //       if (status == "OK") {
-  //         return {
-  //           lat: results[0].geometry.location.lat(),
-  //           lng: results[0].geometry.location.lng(),
-  //         };
-  //       } else {
-  //         alert("Geocode was not successful for the following reason: " + status);
-  //       }
-  //     });
-  //   };
+  const geocoder = new window.google.maps.Geocoder();
+
+  const findLatLong = async (address) => {
+    return await geocoder.geocode({ address }, (results, status) => {
+      if (status !== "OK") {
+        console.log(
+          "Geocode was not successful for the following reason: " + status
+        );
+      }
+    });
+  };
 
   return (
     <div className="returnedTable">
@@ -64,7 +66,7 @@ const UploadCSV = ({ setDrivers, setPassengers }) => {
       <table>
         <thead>
           <tr id="tableHead">
-            {tableRows.map((rows, index) => (
+            {tableCols.map((rows, index) => (
               <th key={index}>{rows}</th>
             ))}
           </tr>
